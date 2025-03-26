@@ -143,9 +143,5 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
    - Verifique o valor de FACE_MATCH_TOLERANCE
    - Tente atualizar a foto do banco de dados
 
-## 📞 Suporte
-
-Para suporte e dúvidas, por favor abra uma issue no GitHub ou entre em contato através do [seu-email@dominio.com].
-
 ---
 Desenvolvido com ❤️ para segurança bancária 
