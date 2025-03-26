@@ -1,4 +1,4 @@
-# Sistema de Autenticação Facial com Detecção de Vivacidade
+# Sistema de Autenticação Facial
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.68%2B-green)
