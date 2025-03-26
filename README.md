@@ -12,10 +12,12 @@
 - [Arquitetura](#-arquitetura)
 - [Instalação](#-instalação)
 - [Como Usar](#-como-usar)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
 - [Segurança](#-segurança)
 - [Contribuição](#-contribuição)
 - [Licença](#-licença)
+- [Métricas e Performance](#-métricas-e-performance)
+- [Troubleshooting](#-troubleshooting)
+
 
 ## 🎯 Sobre o Projeto
 
