@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+streamlit
+opencv-python
+opencv-contrib-python
+numpy
+Pillow
+deepface
+face-recognition
+dlib
+mediapipe
+torch
+torchvision
+requests
+python-multipart
