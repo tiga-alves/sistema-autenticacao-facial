@@ -99,7 +99,7 @@ def main():
             frame_pil = Image.fromarray(frame_rgb)
             
             # Atualiza a interface
-            camera_placeholder.image(frame_pil, use_column_width=True)
+            camera_placeholder.image(frame_pil, use_container_width=True)
             
             # Atualiza o tempo do último frame
             st.session_state.last_frame_time = current_time

@@ -6,7 +6,7 @@ from typing import Tuple, List
 # Configurações
 LAPLACIAN_THRESHOLD = 30
 BLINK_THRESHOLD = 0.3
-MOVEMENT_THRESHOLD = 0.05
+MOVEMENT_THRESHOLD = 0.1
 MIN_FRAMES_FOR_DETECTION = 30  # Reduzido para resposta mais rápida
 INITIALIZATION_FRAMES = 15  # Reduzido para resposta mais rápida
 
@@ -28,7 +28,7 @@ class LivenessDetector:
         self.is_initialized = False
         self.debug_info = {}
         self.consecutive_failures = 0
-        self.max_consecutive_failures = 3
+        self.max_consecutive_failures = 5
         
     def get_eye_aspect_ratio(self, landmarks) -> float:
         LEFT_EYE = [33, 246, 161, 160, 159, 158, 157, 173, 133, 155, 154, 153, 145, 144, 163, 7]
@@ -47,9 +47,20 @@ class LivenessDetector:
     def detect_movement(self, current_landmarks, previous_landmarks) -> float:
         if previous_landmarks is None:
             return 0.0
-        
+
         movement = np.mean(np.abs(current_landmarks - previous_landmarks))
-        return movement
+    
+        # Smooth movement by averaging over the last few frames
+        if not hasattr(self, 'movement_buffer'):
+            self.movement_buffer = []
+    
+        self.movement_buffer.append(movement)
+        if len(self.movement_buffer) > 5:  # Keep the last 5 movements
+            self.movement_buffer.pop(0)
+    
+        avg_movement = np.mean(self.movement_buffer)
+        self.debug_info['average_movement'] = avg_movement
+        return avg_movement
 
     def analyze_image_quality(self, frame) -> bool:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
