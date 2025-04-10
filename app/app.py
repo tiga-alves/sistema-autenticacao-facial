@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 from PIL import Image
 import time
+import face_recognition
 
 # Adiciona o diretório raiz ao caminho de importação
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,6 +14,48 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from custom_face_detection import detect_faces
 from face_identification import identify_face, load_faces
 from liveness_detection import detect_liveness
+
+def load_faces_with_progress():
+    """
+    Carrega as faces conhecidas do banco de dados e exibe uma barra de progresso no Streamlit.
+    """
+    from face_identification import KNOWN_FACES_DIR, known_encodings, known_names
+    
+    
+
+    if not os.path.exists(KNOWN_FACES_DIR):
+        raise FileNotFoundError(f"Diretório de banco de dados '{KNOWN_FACES_DIR}' não encontrado")
+
+    # Lista de arquivos no diretório
+    files = [f for f in os.listdir(KNOWN_FACES_DIR) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
+    total_files = len(files)
+
+    if total_files == 0:
+        raise ValueError("Nenhuma imagem encontrada no banco de dados.")
+
+    # Barra de progresso no Streamlit
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+
+    for idx, name in enumerate(files):
+        img_path = os.path.join(KNOWN_FACES_DIR, name)
+        img = face_recognition.load_image_file(img_path)
+        encodings = face_recognition.face_encodings(img)
+
+        if encodings:
+            known_encodings.append(encodings[0])
+            known_names.append(os.path.splitext(name)[0])
+        else:
+            print(f"Aviso: Nenhuma face encontrada em {name}")
+
+        # Atualiza a barra de progresso
+        progress = (idx + 1) / total_files
+        progress_bar.progress(progress)
+        status_text.text(f"Carregando: {name} ({idx + 1}/{total_files})")
+
+    # Finaliza a barra de progresso
+    progress_bar.empty()
+    status_text.text("Faces conhecidas carregadas com sucesso!")
 
 def main():
     st.title("Sistema de Autenticação Facial")
@@ -31,9 +74,9 @@ def main():
     if 'max_consecutive_failures' not in st.session_state:
         st.session_state.max_consecutive_failures = 3
     
-    # Carrega as faces conhecidas do banco de dados
+    # Carrega as faces conhecidas do banco de dados com barra de progresso
     try:
-        load_faces()
+        load_faces_with_progress()
         st.success("Faces conhecidas carregadas com sucesso!")
     except Exception as e:
         st.error(f"Erro ao carregar faces conhecidas: {str(e)}")
