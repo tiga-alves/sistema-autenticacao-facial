@@ -92,9 +92,19 @@ def main():
     with col2:
         st.subheader("Status")
         status_placeholder = st.empty()
+        
+        # Botão para sair
         if st.button("Sair", key="exit_button_main"):
             st.session_state.camera = None
-            st.experimental_rerun()
+            st.rerun()  # Reinicia a aplicação
+        
+        # Botão para tentar novamente
+        if st.button("Tentar novamente", key="retry_button_main"):
+            # Reinicia o estado necessário para tentar novamente
+            st.session_state.fraude_detectada = False
+            st.session_state.consecutive_failures = 0
+            st.session_state.last_frame_time = 0
+            st.rerun()  # Reinicia a aplicação
     
     # Inicializa a câmera se ainda não estiver inicializada
     if st.session_state.camera is None:
