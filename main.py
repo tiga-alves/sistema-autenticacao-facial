@@ -5,7 +5,7 @@ import numpy as np
 from custom_face_detection import detect_faces
 from face_identification import identify_face, load_faces
 from liveness_detection import detect_liveness
-import os
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
